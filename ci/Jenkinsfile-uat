@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+    stages {
+        stage('Unit Test') {            
+            steps {
+                sh './ci/build.test.sh'
+            }
+        }
+
+        stage('UAT') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'SH_PG',
+                    usernameVariable: 'PG_CREDS_USR',
+                    passwordVariable: 'PG_CREDS_PSW'
+                )]) {
+                    sh '''
+                    ./ci/build.uat.sh
+                    '''
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,195 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "ef-migrations-add",
+            "command": "${userHome}/.dotnet/tools/dotnet-ef",
+            "type": "process",
+            "args": [
+                "migrations",
+                "add",
+                "${input:commitMessage}"
+            ],
+            "options": {
+                "env": {
+                    "DB_SECRET_ENV": "UAT"
+                },
+                "cwd": "${workspaceFolder}/api/",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "ef-update-test",
+            "command": "${userHome}/.dotnet/tools/dotnet-ef",
+            "type": "process",
+            "args": [
+                "database",
+                "update"
+            ],
+            "options": {
+                "env": {
+                    "DB_SECRET_ENV": "TEST"
+                },
+                "cwd": "${workspaceFolder}/api/",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "ef-update-uat",
+            "command": "${userHome}/.dotnet/tools/dotnet-ef",
+            "type": "process",
+            "args": [
+                "database",
+                "update"
+            ],
+            "options": {
+                "env": {
+                    "DB_SECRET_ENV": "UAT"
+                },
+                "cwd": "${workspaceFolder}/api/",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "ef-update-prod",
+            "command": "${userHome}/.dotnet/tools/dotnet-ef",
+            "type": "process",
+            "options": {
+                "env": {
+                    "DB_SECRET_ENV": "PROD"
+                },
+                "cwd": "${workspaceFolder}/api/",
+            },
+            "args": [
+                "database",
+                "update"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "ef-migrations-remove",
+            "command": "${userHome}/.dotnet/tools/dotnet-ef",
+            "type": "process",
+            "args": [
+                "migrations",
+                "remove",
+            ],
+            "options": {
+                "env": {
+                    "DB_SECRET_ENV": "UAT"
+                },
+                "cwd": "${workspaceFolder}/api/",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/api/StockHub.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/api/StockHub.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "${workspaceFolder}/api/StockHub.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "dotnet-list-package-outdated",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "list",
+                "package",
+                "--outdated",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "test",
+            "command": "dotnet",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/tests/",
+            },
+            "args": [
+                "test",
+                "--filter",
+                "Category!=Crawler"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+    ],
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "commitMessage",
+            "description": "Commit message",
+            "default": ""
+        }
+    ]
+}

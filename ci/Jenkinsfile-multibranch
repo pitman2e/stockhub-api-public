@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+    environment {
+        PG_CREDS = credentials('PG_CREDS')
+    }
+
+    stages {
+        stage('Unit Test') {
+            when {
+                branch 'master'  
+            }
+            
+            steps {
+                sh './ci/build.test.sh'
+            }
+        }
+
+        stage('UAT') {
+            when {
+                branch 'master'  
+            }
+
+            steps {
+                sh './ci/build.uat.sh'
+            }
+        }
+
+        stage('Production') {
+            when {
+                branch 'production'  
+            }
+
+            steps {
+                sh './ci/build.prod.sh'
+            }
+        }
+    }
+}

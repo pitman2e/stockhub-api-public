@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  api:
+    image: stockhub-api:${GIT_SHA}
+    build: ../api/
+    ports: #HOST:CONTAINER
+      - 127.0.0.1:${API_PORT}:8080
+    networks: 
+      - pg_net
+    environment:
+      - DATABASE_CONSTR=User ID=${PG_USERNAME};Password=${PG_PASSWORD};Host=${PG_HOST};Port=${PG_PORT};Database=${PG_DATABASE};
+      - STOCKHUB_API_PY_BASE_URL=${STOCKHUB_API_PY_BASE_URL}
+      - CORS_ORIGINS=${CORS_ORIGINS}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    restart: unless-stopped
+
+networks:
+  pg_net: 
+    external: true

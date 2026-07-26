@@ -1,0 +1,41 @@
+﻿{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:30189",
+      "sslPort": 44355
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "SH UAT DB": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:4000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_SECRET_ENV": "UAT",
+        "STOCKHUB_API_PY_BASE_URL": "192.168.1.110:5800",
+        "CORS_ORIGINS": "http://localhost:3000;http://127.0.0.1:3000"
+      }
+    },
+    "SH PROD DB": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:4000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_SECRET_ENV": "PROD",
+        "STOCKHUB_API_PY_BASE_URL": "192.168.1.110:5800",
+        "CORS_ORIGINS": "http://localhost:3000;http://127.0.0.1:3000"
+      }
+    }
+  }
+}

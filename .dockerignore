@@ -1,0 +1,7 @@
+bin/
+obj/
+/app
+/data
+/document
+/cronjob
+/backup

@@ -1,0 +1,13 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build-env
+
+COPY . ./
+
+WORKDIR api/
+
+# RUN dotnet tool install --global dotnet-ef # No longer needed
+
+#Set timezone to HK
+ENV TZ=Asia/Hong_Kong
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+WORKDIR ../tests
