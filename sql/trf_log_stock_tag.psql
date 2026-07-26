@@ -1,0 +1,62 @@
+CREATE OR REPLACE FUNCTION trf_log_stock_tag()
+RETURNS trigger AS $body$
+BEGIN
+   if (TG_OP = 'DELETE') then
+       INSERT INTO log_stock_tag (
+           uid, 
+           stock_id, 
+           tag_cat, 
+           tag, 
+           updated_at, 
+           sta, 
+           iden, 
+           percentage, 
+           color,
+           db_updated_at
+       )
+       VALUES(
+           OLD.uid, 
+           OLD.stock_id, 
+           OLD.tag_cat, 
+           OLD.tag, 
+           OLD.updated_at, 
+           'X', 
+           OLD.iden, 
+           OLD.percentage, 
+           OLD.color,
+           now()
+       );
+             
+       RETURN OLD;
+   else 
+       INSERT INTO log_stock_tag (
+           uid, 
+           stock_id, 
+           tag_cat, 
+           tag, 
+           updated_at, 
+           sta, 
+           iden, 
+           percentage, 
+           color,
+           db_updated_at
+       )
+       VALUES(
+           NEW.uid, 
+           NEW.stock_id, 
+           NEW.tag_cat, 
+           NEW.tag, 
+           NEW.updated_at, 
+           COALESCE(NEW.sta,''),
+           NEW.iden, 
+           NEW.percentage, 
+           NEW.color,
+           now()
+       );
+             
+       RETURN NEW;
+   end if;
+     
+END;
+$body$
+LANGUAGE plpgsql;
