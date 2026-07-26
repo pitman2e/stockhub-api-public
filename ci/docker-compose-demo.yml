@@ -1,0 +1,53 @@
+version: '3.7'
+
+services:
+  api:
+    container_name: sh-demo-api
+    image: sh-demo-api:latest
+    build: 
+      context: ../
+      dockerfile: Dockerfile
+    ports: #HOST:CONTAINER
+      - 4000:4000
+    environment: #Note: Expose secrets for demo only
+      - ConnectionStrings__StockHubDatabase=User ID=pgadmin;Password=temp_password;Host=sh-pgdb;Port=5432;Database=sh_demo;
+      - STOCKHUB_YFINANCE_GRPC=http://yfinance:50051
+      - JWT_SECRET_KEY=GRbL95Er79NH0BjAcLMm7BFuz6ftIqNJFd+itG2YS0o=
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:4000 #Bind all interfaces
+      - CORS_ORIGINS=http://localhost:3000;http://127.0.0.1:3000 #Separated by ;
+      - IS_DEMO=1
+    restart: unless-stopped
+    depends_on:
+      pg:
+        condition: service_healthy
+  pg:
+    container_name: sh-pgdb
+    image: postgres:18
+    environment:
+      - POSTGRES_USER=pgadmin
+      - POSTGRES_PASSWORD=temp_password
+      - POSTGRES_DB=sh_demo
+      - TZ=Asia/Hong_Kong
+      - PGTZ=Asia/Hong_Kong
+    volumes:
+      - type: bind
+        source: ./DatabaseSeed/
+        target: /docker-entrypoint-initdb.d/
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pgadmin -d sh_demo"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
+  yfinance:
+    container_name: sh-demo-yfinance
+    image: stockhub-yfinance-grpc
+    build:
+      context: ../src/yfinance-grpc/
+      dockerfile: Dockerfile
+    command: python server.py
+    ports: #HOST:CONTAINER
+      - 50051:50051

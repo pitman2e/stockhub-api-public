@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package yfinance;
+
+service YFinanceService {
+  rpc GetHistory (HistoryRequest) returns (CsvResponse);
+  rpc GetDividends (DividendRequest) returns (CsvResponse);
+  rpc HealthTest (HealthRequest) returns (HealthResponse);
+}
+
+message HistoryRequest {
+  string ticker = 1;
+  string start_date = 2;
+  string end_date = 3;
+}
+
+message DividendRequest {
+  string ticker = 1;
+}
+
+message HealthRequest {}
+
+message HealthResponse {
+  string status = 1;
+}
+
+message CsvResponse {
+  string csv_data = 1;
+}

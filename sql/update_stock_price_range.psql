@@ -1,0 +1,12 @@
+WITH previous_result AS (
+SELECT stock_id, MIN(market_date) as min_m, MAX(market_date) as max_m
+FROM public.stock_price
+WHERE is_finalised = true
+GROUP BY stock_id
+)
+UPDATE stock t
+set price_min_date = pr.min_m, price_max_date = pr.max_m 
+FROM previous_result pr
+where t.stock_id = pr.stock_id
+
+select * from stock

@@ -1,0 +1,8 @@
+"stock_id","unit_amt","count","tx_date","iden","tran_type","portfolio_id","currency","handling_fee","uid","comment","accrued_interest","ytm","is_transfer","tax","created_at","updated_at","sta"
+"00001.HK",60,500,"2025-01-01",-1,"BUY","IB-HKD","HKD",-20,"TEST_UID",NULL,NULL,NULL,False,NULL,NULL,NULL,NULL
+"00005.HK",30,500,"2025-02-01",-2,"BUY","IB-HKD","HKD",-20,"TEST_UID",NULL,NULL,NULL,False,NULL,NULL,NULL,NULL
+"00006.HK",30,500,"2025-03-01",-3,"BUY","IB-HKD","HKD",-20,"TEST_UID",NULL,NULL,NULL,False,NULL,NULL,NULL,NULL
+"GOOGL.US",150,100,"2025-04-01",-4,"BUY","IB-USD","USD",-3,"TEST_UID",NULL,NULL,NULL,False,NULL,NULL,NULL,NULL
+"MSFT.US",300,100,"2025-05-01",-5,"BUY","IB-USD","USD",-3,"TEST_UID",NULL,NULL,NULL,False,NULL,NULL,NULL,NULL
+"VT.US",180,100,"2025-06-01",-6,"BUY","IB-USD","USD",-1,"TEST_UID",NULL,NULL,NULL,False,NULL,NULL,NULL,NULL
+"VWRA.LSE",190,100,"2025-07-01",-7,"BUY","IB-USD","USD",-2,"TEST_UID",NULL,NULL,NULL,False,NULL,NULL,NULL,NULL

@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+    stages {
+        stage('Backup') {
+            steps {
+                sh './backup/db_backup.sh'
+            }
+
+            post {
+                always {
+                    archiveArtifacts artifacts: '*.pgdump', fingerprint: true
+                }
+            }
+        }
+    }
+}

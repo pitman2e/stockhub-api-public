@@ -1,0 +1,16 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build-env
+
+COPY api/*.csproj ./api/
+COPY ServiceDefaults/*.csproj ./ServiceDefaults/
+COPY tests/UnitTests/*.csproj ./UnitTests/
+RUN dotnet restore ./UnitTests/
+
+COPY api/ ./api/
+COPY ServiceDefaults/ ./ServiceDefaults/
+COPY tests/UnitTests/ ./UnitTests/
+
+#Set timezone to HK
+ENV TZ=Asia/Hong_Kong
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+WORKDIR ../UnitTests
