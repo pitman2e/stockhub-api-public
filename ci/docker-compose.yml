@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  api:
+    image: stockhub-api:${GIT_SHA}
+    build: 
+      context: ../
+      dockerfile: Dockerfile
+    ports: #HOST:CONTAINER
+      - 127.0.0.1:${API_PORT}:8080
+    networks: 
+      - pg_net
+    environment:
+      - ConnectionStrings__StockHubDatabase=User ID=${PG_USERNAME};Password=${PG_PASSWORD};Host=${PG_HOST};Port=${PG_PORT};Database=${PG_DATABASE};
+      - STOCKHUB_YFINANCE_GRPC
+      - CORS_ORIGINS # Equivalent CORS_ORIGINS=${CORS_ORIGINS}
+      - JWT_SECRET_KEY
+    restart: unless-stopped
+
+networks:
+  pg_net: 
+    external: true

@@ -1,0 +1,3 @@
+yfinance==0.2.58
+grpcio==1.83.0
+grpcio-tools==1.83.0
