@@ -1,0 +1,12 @@
+-- Role: stockhub_user
+-- DROP ROLE IF EXISTS stockhub_user;
+
+CREATE ROLE stockhub_user WITH
+  LOGIN
+  NOSUPERUSER
+  INHERIT
+  NOCREATEDB
+  NOCREATEROLE
+  NOREPLICATION
+  NOBYPASSRLS
+  PASSWORD 'dontLeakP@ssword!';

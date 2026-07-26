@@ -1,0 +1,23 @@
+version: '3.7'
+
+networks:
+  pg_net:
+    external: true
+
+services:
+  test:
+    container_name: stockhub-api-test
+    image: stockhub-api-test
+    build:
+      context: ../
+      dockerfile: Dockerfile-test
+    networks:
+      - pg_net
+    environment:
+      - DATABASE_CONSTR
+      - STOCKHUB_YFINANCE_GRPC
+    volumes:
+      # Mounts a 'TestResults' folder from the workspace root (one directory up from 'ci') 
+      # into the container's '/app/TestResults' directory
+      - ../TestResults:/tests/UnitTests/TestResults
+    command: ./build.test.init.sh
