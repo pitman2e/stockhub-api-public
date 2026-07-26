@@ -1,0 +1,6 @@
+services:
+  test:
+    image: stockhub-api-test
+    build: 
+      context: ..
+      dockerfile: Dockerfile-test

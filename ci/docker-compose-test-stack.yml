@@ -1,0 +1,52 @@
+services:
+  api:
+    container_name: sh-test-api
+    image: sh-test-api:latest
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    ports:
+      - "4100:4000"
+    environment:
+      - ConnectionStrings__StockHubDatabase=User ID=pgadmin;Password=temp_password;Host=sh-test-pgdb;Port=5432;Database=sh_test;
+      - STOCKHUB_YFINANCE_GRPC=http://yfinance:50051
+      - JWT_SECRET_KEY=GRbL95Er79NH0BjAcLMm7BFuz6ftIqNJFd+itG2YS0o=
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:4000
+      - CORS_ORIGINS=http://localhost:3000;http://127.0.0.1:3000
+      - IS_DEMO=1
+    restart: unless-stopped
+    depends_on:
+      pg:
+        condition: service_healthy
+  pg:
+    container_name: sh-test-pgdb
+    image: postgres:18
+    environment:
+      - POSTGRES_USER=pgadmin
+      - POSTGRES_PASSWORD=temp_password
+      - POSTGRES_DB=sh_test
+      - TZ=Asia/Hong_Kong
+      - PGTZ=Asia/Hong_Kong
+    volumes:
+      - type: bind
+        source: ./DatabaseSeed/
+        target: /docker-entrypoint-initdb.d/
+        read_only: true
+    ports:
+      - "6432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pgadmin -d sh_test"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
+  yfinance:
+    container_name: sh-test-yfinance
+    image: stockhub-yfinance-grpc-test:latest
+    build:
+      context: ../src/yfinance-grpc/
+      dockerfile: Dockerfile
+    command: python server.py
+    ports:
+      - "50052:50051"

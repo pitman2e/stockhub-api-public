@@ -1,0 +1,224 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "ef-migrations-add",
+            "command": "${workspaceFolder}/ci/with-db.sh",
+            "type": "shell",
+            "args": [
+                "UAT",
+                "${userHome}/.dotnet/tools/dotnet-ef",
+                "migrations",
+                "add",
+                "${input:commitMessage}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/api/",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "ef-update-test",
+            "command": "${workspaceFolder}/ci/with-db.sh",
+            "type": "shell",
+            "args": [
+                "TEST",
+                "${userHome}/.dotnet/tools/dotnet-ef",
+                "database",
+                "update"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/api/",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "ef-update-uat",
+            "command": "${workspaceFolder}/ci/with-db.sh",
+            "type": "shell",
+            "args": [
+                "UAT",
+                "${userHome}/.dotnet/tools/dotnet-ef",
+                "database",
+                "update"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/api/",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "ef-update-prod",
+            "command": "${workspaceFolder}/ci/with-db.sh",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/api/",
+            },
+            "args": [
+                "PROD",
+                "${userHome}/.dotnet/tools/dotnet-ef",
+                "database",
+                "update"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "ef-migrations-remove",
+            "command": "${workspaceFolder}/ci/with-db.sh",
+            "type": "shell",
+            "args": [
+                "UAT",
+                "${userHome}/.dotnet/tools/dotnet-ef",
+                "migrations",
+                "remove",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/api/",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/api/StockHub.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "gen-env-uat",
+            "command": "${workspaceFolder}/ci/with-db.sh",
+            "type": "shell",
+            "args": [
+                "--write-env",
+                "UAT",
+                "${workspaceFolder}/.vscode/.env.UAT.generated"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/",
+            },
+            "dependsOn": [
+                "build"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "gen-env-prod",
+            "command": "${workspaceFolder}/ci/with-db.sh",
+            "type": "shell",
+            "args": [
+                "--write-env",
+                "PROD",
+                "${workspaceFolder}/.vscode/.env.PROD.generated"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/",
+            },
+            "dependsOn": [
+                "build"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/api/StockHub.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "${workspaceFolder}/api/StockHub.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "dotnet-list-package-outdated",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "list",
+                "package",
+                "--outdated",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "test",
+            "command": "dotnet",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/tests/",
+            },
+            "args": [
+                "test",
+                "--filter",
+                "Category!=Crawler"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+    ],
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "commitMessage",
+            "description": "Commit message",
+            "default": ""
+        }
+    ]
+}
