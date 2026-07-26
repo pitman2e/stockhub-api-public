@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  grpc:
+    build: ..
+    image: stockhub-yfinance-grpc:${GIT_SHA}
+    container_name: stockhub-yfinance-grpc
+    command: python server.py
+    ports: # HOST:CONTAINER
+      - ${WEB_PORT}:50051
+    restart: unless-stopped
+    networks:
+        - pg_net
+
+networks:
+  pg_net:
+    external: true

@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    stages {
+        stage('Unit Test') {            
+            steps {
+                sh './ci/build.test.sh'
+            }
+        }
+
+        stage('UAT') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'SH_PG',
+                    usernameVariable: 'PG_CREDS_USR',
+                    passwordVariable: 'PG_CREDS_PSW'
+                )]) {
+                    sh '''
+                    ./ci/build.uat.sh
+                    '''
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo 'Executing post-pipeline steps...'
+            xunit (tools: [ MSTest(pattern: '**/*.trx') ], skipPublishingChecks: false)
+        }
+        success {
+            echo 'Pipeline completed successfully! Ready for further deployment or merge.'
+            // If using the GitHub plugin, you can set commit statuses here
+        }
+        failure {
+            echo 'Pipeline failed. Check the logs and test results.'
+            // Example: Notify developers via email or Slack
+        }
+    }
+}

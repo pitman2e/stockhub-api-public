@@ -1,0 +1,8 @@
+{
+    "search.exclude": {
+        "**/Migrations": true
+    },
+    "chat.tools.terminal.autoApprove": {
+        "dotnet test": true
+    }
+}

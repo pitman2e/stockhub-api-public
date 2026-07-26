@@ -1,0 +1,3 @@
+"portfolio_id","iden","name","priority","default_currency","uid","is_ex_summary","is_virtual","created_at","sta","updated_at"
+"IB-HKD",1,"IB (HKD)",0,"HKD","TEST_UID",False,False,NULL,NULL,NULL
+"IB-USD",2,"IB (USD)",0,"USD","TEST_UID",False,False,NULL,NULL,NULL
